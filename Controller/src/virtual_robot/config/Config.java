@@ -28,7 +28,13 @@ public class Config {
     /**
      * Whether to use "Virtual Gamepad" (true -> Virtual gamepad, false -> Real gamepad)
      */
-    public static final boolean USE_VIRTUAL_GAMEPAD = true;
+    public static boolean USE_VIRTUAL_GAMEPAD() {
+        String envValue = System.getenv("USE_VIRTUAL_GAMEPAD");
+        if (envValue == null) {
+            return true;
+        }
+        return envValue.trim().toLowerCase().equals("true");
+    }
 
     /**
      * The image object for the field.

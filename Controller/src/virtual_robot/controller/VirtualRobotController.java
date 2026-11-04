@@ -183,7 +183,7 @@ public class VirtualRobotController {
         sldSystematicMotorError.valueProperty().addListener(sliderChangeListener);
         sldMotorInertia.valueProperty().addListener(sliderChangeListener);
 
-        if (Config.USE_VIRTUAL_GAMEPAD){
+        if (Config.USE_VIRTUAL_GAMEPAD()){
             vbxRight.getChildren().remove(hbxGamePads);
 //            checkBoxGamePad1.setVisible(false);
 //            checkBoxGamePad2.setVisible(false);
