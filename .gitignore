@@ -1,4 +1,4 @@
 out/
 *.class
-.idea
-target
+.idea/
+target/

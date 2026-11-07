@@ -74,8 +74,7 @@ To use:
      annotation. These must extend the OpMode class (may either extend OpMode OR LinearOpMode). OpMode must provide 
      init() and loop() methods; LinearOpMode must provide runOpMode() method.
   4. You can either use the Virtual Gamepad (currently the default), or use one or two real Gamepads; to use real 
-     gamepads, open Controller/src/virtual_robot/config/Config.java and set USE_VIRTUAL_GAMEPAD to false. Then plug 
-     in your gamepad(s). 
+     gamepads, set the USE_VIRTUAL_GAMEPAD environment variable to "false" (case-insensitive), then plug in your gamepad(s). If the environment variable is missing or invalid, the virtual gamepad is used by default.
   5. Run the application (by clicking the green arrowhead at the toolbar).
   6. If using real gamepad(s), press start-A or start-B on gamepad(s) to select which is gamepad1 vs. gamepad2.
   7. Use Configuration dropdown box to select a robot configuration. The configuration file will be displayed.
@@ -84,6 +83,51 @@ To use:
      and right-mouse-clicking (for robot orientation).
   10. Use the INIT/START/STOP button as you would on the FTC Driver Station.
   11. If desired use the sliders to introduce random and systematic motor error, and inertia.
+
+
+## Building and Deploying the Shaded JAR
+
+The simulator can be built into a shaded JAR (an "uber jar" that bundles all dependencies) using Maven. To build:
+
+```bash
+mvn clean package -DskipTests
+```
+
+The shaded JAR is produced in the `target` directory:
+
+```bash
+target/virtual-robot-simulator-1.5.0-SNAPSHOT.jar
+```
+
+This JAR contains all of the simulator's code and dependencies (JavaFX, dyn4j, OpenCV, etc.), but excludes the `TeamCode` directory (user-defined opmodes). The JAR is then copied into a Maven repository structure within the repository, so that other projects can include it as a dependency:
+
+```bash
+repo/com/github/tedb04/virtual-robot-simulator/1.5.0-SNAPSHOT/virtual-robot-simulator-1.5.0-SNAPSHOT.jar
+```
+
+## Using the Shaded JAR as a Dependency
+
+To use this JAR as a dependency in another project, add the following to the project's `pom.xml`:
+
+```xml
+<repositories>
+    <repository>
+        <id>github-jar-repo</id>
+        <url>https://githubusercontent.com</url>
+    </repository>
+</repositories>
+<dependencies>
+    <dependency>
+        <groupId>com.github.tedb04</groupId>
+        <artifactId>virtual-robot-simulator</artifactId>
+        <version>1.5.0-SNAPSHOT</version>
+    </dependency>
+</dependencies>
+```
+
+## Environment Variable Configuration
+
+The `USE_VIRTUAL_GAMEPAD` setting (which determines whether to use the virtual gamepad or real hardware gamepads) is now controlled by the `USE_VIRTUAL_GAMEPAD` environment variable (case-insensitive). If the environment variable is missing or contains any value other than "true" or "false", the default value of "true" is used.
 
 Acknowledgement: Thanks to Alan Smith for a contribution in 2019 for a contribution that provides compatibility with
 a wider variety of OpModes ("iterative" opmodes in addition to the original "linear" opmode support).
