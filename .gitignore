@@ -1,4 +1,4 @@
 out/
 *.class
-.idea/vcs.xml
-.idea/workspace.xml
+.idea
+target

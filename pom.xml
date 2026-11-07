@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://apache.org"
-         xmlns:xsi="http://w3.org"
-         xsi:schemaLocation="http://apache.org http://apache.org">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Update these coordinates to match your GitHub namespace -->
@@ -39,51 +39,37 @@
         <dependency>
             <groupId>org.dyn4j</groupId>
             <artifactId>dyn4j</artifactId>
-            <version>local</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/dyn4j-4.1.4.jar</systemPath>
+            <version>4.1.4</version>
         </dependency>
         <dependency>
             <groupId>org.openftc</groupId>
             <artifactId>easyopencv</artifactId>
-            <version>local</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/EasyOpenCV_v1.5.0_OBJ_bundle.jar</systemPath>
+            <version>1.5.0_OBJ_bundle</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>local</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/guava-20.0.jar</systemPath>
+            <version>20.0</version>
         </dependency>
         <dependency>
             <groupId>com.studiohartman</groupId>
             <artifactId>jamepad</artifactId>
-            <version>local</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/jamepad.jar</systemPath>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>local</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/javassist-3.21.0-GA.jar</systemPath>
+            <version>3.21.0-GA</version>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>local</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/reflections-0.9.11.jar</systemPath>
+            <version>0.9.11</version>
         </dependency>
         <dependency>
             <groupId>com.acmerobotics.roadrunner</groupId>
             <artifactId>roadrunner</artifactId>
-            <version>local</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/RoadRunner.jar</systemPath>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 
@@ -99,6 +85,112 @@
         </resources>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>install-local-jar-dyn4j</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.basedir}/lib/dyn4j-4.1.4.jar</file>
+                            <groupId>org.dyn4j</groupId>
+                            <artifactId>dyn4j</artifactId>
+                            <version>4.1.4</version>
+                            <packaging>jar</packaging>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-local-jar-EasyOpenCV</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.basedir}/lib/EasyOpenCV_v1.5.0_OBJ_bundle.jar</file>
+                            <groupId>org.openftc</groupId>
+                            <artifactId>easyopencv</artifactId>
+                            <version>1.5.0_OBJ_bundle</version>
+                            <packaging>jar</packaging>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-local-jar-guava</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.basedir}/lib/guava-20.0.jar</file>
+                            <groupId>com.google.guava</groupId>
+                            <artifactId>guava</artifactId>
+                            <version>20.0</version>
+                            <packaging>jar</packaging>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-local-jar-jamepad</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.basedir}/lib/jamepad.jar</file>
+                            <groupId>com.studiohartman</groupId>
+                            <artifactId>jamepad</artifactId>
+                            <version>1.0</version>
+                            <packaging>jar</packaging>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-local-jar-javassist</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.basedir}/lib/javassist-3.21.0-GA.jar</file>
+                            <groupId>org.javassist</groupId>
+                            <artifactId>javassist</artifactId>
+                            <version>3.21.0-GA</version>
+                            <packaging>jar</packaging>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-local-jar-reflections</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.basedir}/lib/reflections-0.9.11.jar</file>
+                            <groupId>org.reflections</groupId>
+                            <artifactId>reflections</artifactId>
+                            <version>0.9.11</version>
+                            <packaging>jar</packaging>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-local-jar-roadrunner</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.basedir}/lib/RoadRunner.jar</file>
+                            <groupId>com.acmerobotics.roadrunner</groupId>
+                            <artifactId>roadrunner</artifactId>
+                            <version>1.0</version>
+                            <packaging>jar</packaging>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Maven Shade Plugin Configuration -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
