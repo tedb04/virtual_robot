@@ -394,8 +394,12 @@ public class VirtualRobotController {
     }
 
     private void setupCbxOpModes(){
-        Reflections reflections = new Reflections("");
-//        Reflections reflections = new Reflections("org.firstinspires.ftc.teamcode");
+        String packagePath = System.getenv("OP_MODE_PACKAGE");
+        if (packagePath == null || packagePath.isEmpty()) {
+            throw new RuntimeException("Environment variable 'OP_MODE_PACKAGE' must be set. Please set it to the package containing your OpModes (e.g., 'org.firstinspires.ftc.teamcode').");
+        }
+
+        Reflections reflections = new Reflections(packagePath);
         Set<Class<?>> opModes = new HashSet<>();
         opModes.addAll(reflections.getTypesAnnotatedWith(TeleOp.class));
         opModes.addAll(reflections.getTypesAnnotatedWith(Autonomous.class));//Lists of OpMode classes and OpMode Names
@@ -412,9 +416,13 @@ public class VirtualRobotController {
                 String group1 = getGroupFromAnnotationOrOpmode(o1);
                 String group2 = getGroupFromAnnotationOrOpmode(o2);
 
-                if (group1 == null) return -1;
-                else if (group2 == null) return 1;
-                else return group1.compareToIgnoreCase(group2);
+                if (group1 == null) {
+                    return -1;
+                } else if (group2 == null) {
+                    return 1;
+                } else {
+                    return group1.compareToIgnoreCase(group2);
+                }
             }
         });
 
@@ -457,7 +465,11 @@ public class VirtualRobotController {
             }
         });
 
-        cbxOpModes.setValue(cbxOpModes.getItems().get(0));
+        if (!nonDisabledOpModeClasses.isEmpty()) {
+            cbxOpModes.setValue(nonDisabledOpModeClasses.get(0));
+        } else {
+            cbxOpModes.setItems(FXCollections.observableArrayList()); 
+        }
     }
 
 
@@ -583,8 +595,8 @@ public class VirtualRobotController {
                 //For regular opMode, run user-defined init_loop() method. For Linear opMode, init_loop checks whether
                 //runOpMode has exited; if so, it interrupts the opModeThread.
                 opMode.init_loop();
-                //For regular op mode, update telemetry after each iteration of init_loop()
-                //For linear op mode, do-nothing
+                //For regular opmode, update telemetry after each iteration of init_loop()
+                //For linear opmode, do-nothing
                 opMode.internalPostInitLoop();
 
                 try {
@@ -620,8 +632,8 @@ public class VirtualRobotController {
                 //runOpMode has exited; if so, it interrupts the opModeThread.
                 opMode.loop();
 
-                //For regular op mode only, update telemetry after each execution of loop()
-                //For linear op mode, do-nothing
+                //For regular opmode, update telemetry after each execution of loop()
+                //For linear opmode, do-nothing
                 opMode.internalPostLoop();
 
                 try {
