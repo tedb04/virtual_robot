@@ -32,6 +32,10 @@ import org.dyn4j.world.World;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
 import org.reflections.Reflections;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
+import org.reflections.scanners.Scanners;
 import virtual_robot.config.Config;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -400,7 +404,16 @@ public class VirtualRobotController {
         }
         System.out.println("OP_MODE_PACKAGE: " + packagePath);
 
-        Reflections reflections = new Reflections(packagePath);
+        // Explicitly configure URLs, classpath scanning, and filters
+        Reflections reflections = new Reflections(
+                new ConfigurationBuilder()
+                        // Use the current thread's class loader to handle cross-project boundaries safely
+                        .addUrls(ClasspathHelper.forPackage(packagePath, Thread.currentThread().getContextClassLoader()))
+                        .addClassLoaders(Thread.currentThread().getContextClassLoader())
+                        .filterInputsBy(new FilterBuilder().includePackage(packagePath))
+                        // Explicitly pass scanners (mandatory in 0.10.2+)
+                        .setScanners(Scanners.TypesAnnotated, Scanners.SubTypes)
+        );
         Set<Class<?>> opModes = new HashSet<>();
         opModes.addAll(reflections.getTypesAnnotatedWith(TeleOp.class));
         opModes.addAll(reflections.getTypesAnnotatedWith(Autonomous.class));//Lists of OpMode classes and OpMode Names
