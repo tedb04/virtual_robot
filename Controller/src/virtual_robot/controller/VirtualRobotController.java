@@ -404,16 +404,15 @@ public class VirtualRobotController {
         }
         System.out.println("OP_MODE_PACKAGE: " + packagePath);
 
-        // Explicitly configure URLs, classpath scanning, and filters
+        // Explicitly pull the full Java classpath (populated by Gradle's JavaExec task)
         Reflections reflections = new Reflections(
                 new ConfigurationBuilder()
-                        // Use the current thread's class loader to handle cross-project boundaries safely
-                        .addUrls(ClasspathHelper.forPackage(packagePath, Thread.currentThread().getContextClassLoader()))
+                        .setUrls(ClasspathHelper.forJavaClassPath())
                         .addClassLoaders(Thread.currentThread().getContextClassLoader())
                         .filterInputsBy(new FilterBuilder().includePackage(packagePath))
-                        // Explicitly pass scanners (mandatory in 0.10.2+)
                         .setScanners(Scanners.TypesAnnotated, Scanners.SubTypes)
         );
+
         Set<Class<?>> opModes = new HashSet<>();
         opModes.addAll(reflections.getTypesAnnotatedWith(TeleOp.class));
         opModes.addAll(reflections.getTypesAnnotatedWith(Autonomous.class));//Lists of OpMode classes and OpMode Names
