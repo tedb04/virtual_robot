@@ -398,6 +398,7 @@ public class VirtualRobotController {
         if (packagePath == null || packagePath.isEmpty()) {
             throw new RuntimeException("Environment variable 'OP_MODE_PACKAGE' must be set. Please set it to the package containing your OpModes (e.g., 'org.firstinspires.ftc.teamcode').");
         }
+        System.out.println("OP_MODE_PACKAGE: " + packagePath);
 
         Reflections reflections = new Reflections(packagePath);
         Set<Class<?>> opModes = new HashSet<>();
@@ -405,7 +406,9 @@ public class VirtualRobotController {
         opModes.addAll(reflections.getTypesAnnotatedWith(Autonomous.class));//Lists of OpMode classes and OpMode Names
         ObservableList<Class<?>> nonDisabledOpModeClasses = FXCollections.observableArrayList();
         for (Class<?> c : opModes){
+            System.out.println("Checking:" + c.getName());
             if (c.getAnnotation(Disabled.class) == null && OpMode.class.isAssignableFrom(c)){
+                System.out.println("Adding:" + c.getName());
                 nonDisabledOpModeClasses.add(c);
             }
         }
