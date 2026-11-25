@@ -47,6 +47,7 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import java.net.URL;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -423,13 +424,16 @@ public class VirtualRobotController {
         }
 
 
-        // Explicitly pull the full Java classpath (populated by Gradle's JavaExec task)
+        Set<URL> urls = new HashSet<>();
+        urls.addAll(ClasspathHelper.forJavaClassPath());
+        urls.addAll(ClasspathHelper.forPackage(packagePath));
+
         Reflections reflections = new Reflections(
-        new ConfigurationBuilder()
-                .setUrls(ClasspathHelper.forClassLoader(contextClassLoader, localClassLoader))
-                .addClassLoaders(contextClassLoader, localClassLoader)
-                .filterInputsBy(new FilterBuilder().includePackage(packagePath))
-                .setScanners(Scanners.TypesAnnotated, Scanners.SubTypes)
+                new ConfigurationBuilder()
+                        .setUrls(urls)
+                        .addClassLoaders(Thread.currentThread().getContextClassLoader(), getClass().getClassLoader())
+                        .filterInputsBy(new FilterBuilder().includePackage(packagePath))
+                        .setScanners(Scanners.TypesAnnotated, Scanners.SubTypes)
         );
 
         Set<Class<?>> opModes = new HashSet<>();
