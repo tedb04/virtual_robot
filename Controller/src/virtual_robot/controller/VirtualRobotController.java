@@ -407,6 +407,22 @@ public class VirtualRobotController {
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         ClassLoader localClassLoader = getClass().getClassLoader();
 
+        System.out.println("=== 1. System java.class.path ===");
+        for (String path : System.getProperty("java.class.path").split(java.io.File.pathSeparator)) {
+            System.out.println("  " + path);
+        }
+
+        System.out.println("=== 2. ClasspathHelper.forClassLoader URLs ===");
+        for (java.net.URL url : ClasspathHelper.forClassLoader(contextClassLoader, localClassLoader)) {
+            System.out.println("  " + url);
+        }
+
+        System.out.println("=== 3. ClassLoader Hierarchy ===");
+        for (ClassLoader cl = contextClassLoader; cl != null; cl = cl.getParent()) {
+            System.out.println("  " + cl.getClass().getName() + " -> " + cl);
+        }
+
+
         // Explicitly pull the full Java classpath (populated by Gradle's JavaExec task)
         Reflections reflections = new Reflections(
         new ConfigurationBuilder()
