@@ -47,7 +47,7 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.DcMotorImpl;
+
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import virtual_robot.robots.ControlsElements;
@@ -404,13 +404,16 @@ public class VirtualRobotController {
         }
         System.out.println("OP_MODE_PACKAGE: " + packagePath);
 
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader localClassLoader = getClass().getClassLoader();
+
         // Explicitly pull the full Java classpath (populated by Gradle's JavaExec task)
         Reflections reflections = new Reflections(
-                new ConfigurationBuilder()
-                        .setUrls(ClasspathHelper.forJavaClassPath())
-                        .addClassLoaders(Thread.currentThread().getContextClassLoader())
-                        .filterInputsBy(new FilterBuilder().includePackage(packagePath))
-                        .setScanners(Scanners.TypesAnnotated, Scanners.SubTypes)
+        new ConfigurationBuilder()
+                .setUrls(ClasspathHelper.forClassLoader(contextClassLoader, localClassLoader))
+                .addClassLoaders(contextClassLoader, localClassLoader)
+                .filterInputsBy(new FilterBuilder().includePackage(packagePath))
+                .setScanners(Scanners.TypesAnnotated, Scanners.SubTypes)
         );
 
         Set<Class<?>> opModes = new HashSet<>();
